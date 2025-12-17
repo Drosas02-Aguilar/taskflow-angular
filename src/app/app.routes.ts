@@ -30,53 +30,53 @@ export const routes: Routes = [
       .then(m => m.ResetPasswordComponent)
   },
   {
-    path: 'auth/verify',
-    loadComponent: () => import('./features/auth/verify/verify.component')
-      .then(m => m.VerifyComponent)
-  },
-  
-  {
     path: 'auth/change-password',
     canActivate: [authGuard],
     loadComponent: () => import('./features/auth/change-password/change-password.component')
       .then(m => m.ChangePasswordComponent)
-  },
-  {
-    path: 'dashboard',
-    canActivate: [authGuard],
-    loadComponent: () => import('./features/dashboard/dashboard.component')
-      .then(m => m.DashboardComponent)
-  },
-  {
-    path: 'tareas',
-    canActivate: [authGuard],
-    loadComponent: () => import('./features/tareas/lista-tareas/lista-tareas.component')
-      .then(m => m.ListaTareasComponent)
-  },
-  {
-    path: 'tareas/nueva',
-    canActivate: [authGuard],
-    loadComponent: () => import('./features/tareas/tarea-form/tarea-form.component')
-      .then(m => m.TareaFormComponent)
-  },
-  {
-    path: 'tareas/editar/:id',
-    canActivate: [authGuard],
-    loadComponent: () => import('./features/tareas/tarea-form/tarea-form.component')
-      .then(m => m.TareaFormComponent)
-  },
-  {
-    path: 'usuario/perfil',
-    canActivate: [authGuard],
-    loadComponent: () => import('./features/usuario/perfil/perfil.component')
-      .then(m => m.PerfilComponent)
-  },
-  {
-    path: 'usuario/editar',
-    canActivate: [authGuard],
-    loadComponent: () => import('./features/usuario/editar/editar.component')
-      .then(m => m.EditarComponent)
-  },
+  }
+  ,
+  // {
+  //   path: 'auth/verify',
+  //   loadComponent: () => import('./features/auth/verify/verify.component')
+  //     .then(m => m.VerifyComponent)
+  // },
+  // {
+  //   path: 'dashboard',
+  //   canActivate: [authGuard],
+  //   loadComponent: () => import('./features/dashboard/dashboard.component')
+  //     .then(m => m.DashboardComponent)
+  // },
+  // {
+  //   path: 'tareas',
+  //   canActivate: [authGuard],
+  //   loadComponent: () => import('./features/tareas/lista-tareas/lista-tareas.component')
+  //     .then(m => m.ListaTareasComponent)
+  // },
+  // {
+  //   path: 'tareas/nueva',
+  //   canActivate: [authGuard],
+  //   loadComponent: () => import('./features/tareas/tarea-form/tarea-form.component')
+  //     .then(m => m.TareaFormComponent)
+  // },
+  // {
+  //   path: 'tareas/editar/:id',
+  //   canActivate: [authGuard],
+  //   loadComponent: () => import('./features/tareas/tarea-form/tarea-form.component')
+  //     .then(m => m.TareaFormComponent)
+  // },
+  // {
+  //   path: 'usuario/perfil',
+  //   canActivate: [authGuard],
+  //   loadComponent: () => import('./features/usuario/perfil/perfil.component')
+  //     .then(m => m.PerfilComponent)
+  // },
+  // {
+  //   path: 'usuario/editar',
+  //   canActivate: [authGuard],
+  //   loadComponent: () => import('./features/usuario/editar/editar.component')
+  //     .then(m => m.EditarComponent)
+  // },
   
   { path: '**', redirectTo: '/auth/login' }
 ];
