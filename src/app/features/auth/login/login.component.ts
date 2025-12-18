@@ -12,7 +12,7 @@ import { AuthService } from '../../../core/services/auth.service';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-  private fb = inject(FormBuilder);
+  private form = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
@@ -24,7 +24,7 @@ export class LoginComponent {
   successMessage = signal<string | null>(null);
 
   constructor() {
-    this.loginForm = this.fb.group({
+    this.loginForm = this.form.group({
       username: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
@@ -51,8 +51,13 @@ export class LoginComponent {
 
     this.authService.login(this.loginForm.value).subscribe({
       next: (response) => {
+
+     
+      console.log(response);
+      
+
         this.loading.set(false);
-        if (response.correct && response.object) {
+        if (response.status === 200 && response.object) {
           this.router.navigate(['/dashboard']);
         } else {
           this.errorMessage.set(response.errorMessage || 'Credenciales inválidas');

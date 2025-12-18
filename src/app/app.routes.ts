@@ -36,17 +36,17 @@ export const routes: Routes = [
       .then(m => m.ChangePasswordComponent)
   }
   ,
-  // {
-  //   path: 'auth/verify',
-  //   loadComponent: () => import('./features/auth/verify/verify.component')
-  //     .then(m => m.VerifyComponent)
-  // },
-  // {
-  //   path: 'dashboard',
-  //   canActivate: [authGuard],
-  //   loadComponent: () => import('./features/dashboard/dashboard.component')
-  //     .then(m => m.DashboardComponent)
-  // },
+  {
+    path: 'auth/verify',
+    loadComponent: () => import('./features/auth/verify/verify.component')
+      .then(m => m.VerifyComponent)
+  },
+  {
+    path: 'dashboard',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/dashboard/dashboard.component')
+      .then(m => m.DashboardComponent)
+  },
   // {
   //   path: 'tareas',
   //   canActivate: [authGuard],

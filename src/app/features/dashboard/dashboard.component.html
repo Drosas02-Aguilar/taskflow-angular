@@ -1,0 +1,146 @@
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-custom">
+  <div class="container">
+    <a class="navbar-brand" routerLink="/dashboard">
+      <div class="brand-icon">
+        <i class="bi bi-check2-circle"></i>
+      </div>
+      TaskFlow
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto align-items-center">
+        <li class="nav-item">
+          <a class="nav-link active" routerLink="/dashboard">
+            <i class="bi bi-house-door me-1"></i> Inicio
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/tareas">
+            <i class="bi bi-list-task me-1"></i> Mis Tareas
+          </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle user-dropdown" href="#" data-bs-toggle="dropdown">
+            <i class="bi bi-person-circle me-1"></i> {{ username }}
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <a class="dropdown-item" routerLink="/usuario/perfil">
+                <i class="bi bi-person me-2"></i> Mi Perfil
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" routerLink="/auth/change-password">
+                <i class="bi bi-key me-2"></i> Cambiar Contraseña
+              </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <a class="dropdown-item text-danger" (click)="logout()">
+                <i class="bi bi-box-arrow-right me-2"></i> Cerrar Sesión
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<div class="main-content">
+  <div class="container">
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+      <div class="welcome-text">
+        <h1>{{ greeting }}, <span class="username">{{ username }}</span> 👋</h1>
+        <p>Bienvenido a TaskFlow. Organiza y gestiona tus tareas de forma eficiente.</p>
+      </div>
+      <div class="welcome-image">
+        <i class="bi bi-clipboard2-check"></i>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="section-header">
+      <h2><i class="bi bi-lightning-charge me-2"></i>Acciones Rápidas</h2>
+    </div>
+
+    <div class="quick-actions">
+      <a routerLink="/tareas/nueva" class="action-card card-create">
+        <div class="action-icon">
+          <i class="bi bi-plus-circle"></i>
+        </div>
+        <div class="action-content">
+          <h3>Nueva Tarea</h3>
+          <p>Crea una nueva tarea para organizar tu trabajo</p>
+        </div>
+        <i class="bi bi-arrow-right action-arrow"></i>
+      </a>
+
+      <a routerLink="/tareas" class="action-card card-list">
+        <div class="action-icon">
+          <i class="bi bi-list-check"></i>
+        </div>
+        <div class="action-content">
+          <h3>Ver Tareas</h3>
+          <p>Revisa y gestiona todas tus tareas pendientes</p>
+        </div>
+        <i class="bi bi-arrow-right action-arrow"></i>
+      </a>
+
+      <a routerLink="/usuario/perfil" class="action-card card-profile">
+        <div class="action-icon">
+          <i class="bi bi-person-gear"></i>
+        </div>
+        <div class="action-content">
+          <h3>Mi Perfil</h3>
+          <p>Actualiza tu información personal</p>
+        </div>
+        <i class="bi bi-arrow-right action-arrow"></i>
+      </a>
+    </div>
+
+    <!-- Tips Section -->
+    <div class="section-header">
+      <h2><i class="bi bi-lightbulb me-2"></i>Consejos</h2>
+    </div>
+
+    <div class="tips-section">
+      <div class="tip-card">
+        <div class="tip-icon">
+          <i class="bi bi-calendar-check"></i>
+        </div>
+        <div class="tip-content">
+          <h4>Establece fechas límite</h4>
+          <p>Las tareas con fecha límite te ayudan a priorizar y cumplir tus objetivos a tiempo.</p>
+        </div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-icon">
+          <i class="bi bi-flag"></i>
+        </div>
+        <div class="tip-content">
+          <h4>Usa los estados</h4>
+          <p>Clasifica tus tareas como Iniciada, Pendiente o Completada para un mejor seguimiento.</p>
+        </div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-icon">
+          <i class="bi bi-pencil-square"></i>
+        </div>
+        <div class="tip-content">
+          <h4>Descripciones claras</h4>
+          <p>Añade descripciones detalladas para recordar los detalles importantes de cada tarea.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

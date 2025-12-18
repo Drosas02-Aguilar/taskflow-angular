@@ -88,7 +88,7 @@ export class AuthService {
   login(usuario: { username: string; password: string }): Observable<Result<LoginResponse>> {
     return this.http.post<Result<LoginResponse>>(`${this.apiUrl}/login`, usuario).pipe(
       tap(response => {
-        if (response.correct && response.object) {
+        if (response.status ===200 && response.object) {
           const { token, username, idUsuario } = response.object;
           this.saveSession(token, username, idUsuario);
         }
