@@ -35,11 +35,18 @@ export class TareaService {
         return this.http.put<Result<Tarea>>(`${this.apiUrl}/usuario/${this.idUsuario}/${idTarea}`, tarea);
     }
 
+
+  eliminarTarea(idTarea: number): Observable<Result> {
+    return this.http.delete<Result>(`${this.apiUrl}/usuario/eliminacion/${this.idUsuario}/${idTarea}`);
+  }
+
     cambiarEstado(idTarea: number, estado: EstadoTarea): Observable<Result<Tarea>> {
         return this.http.patch<Result<Tarea>>(
             `${this.apiUrl}/usuario/${this.idUsuario}/${idTarea}/estado`,
             { estado }
         );
     }
+
+
 
 }

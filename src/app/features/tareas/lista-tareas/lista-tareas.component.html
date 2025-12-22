@@ -1,0 +1,398 @@
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-custom">
+  <div class="container-fluid px-4">
+    <a class="navbar-brand" routerLink="/dashboard">
+      <div class="brand-icon">
+        <i class="bi bi-check2-circle"></i>
+      </div>
+      TaskFlow
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto align-items-center">
+        <li class="nav-item me-2">
+          <a routerLink="/usuario/perfil" class="user-badge">
+            <i class="bi bi-person-circle"></i>
+            <span>{{ username }}</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" (click)="logout()" style="cursor: pointer;">
+            <i class="bi bi-box-arrow-right me-1"></i> Salir
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<div class="main-content">
+  <div class="container">
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div>
+          <h1 class="page-title">Mis Tareas</h1>
+          <p class="page-subtitle">Gestiona y organiza tus actividades</p>
+        </div>
+        <a routerLink="/tareas/nueva" class="btn-new-task">
+          <i class="bi bi-plus-circle"></i>
+          Nueva Tarea
+        </a>
+      </div>
+    </div>
+
+    <!-- Filtros y Ordenamiento -->
+    <div class="filters-container mb-4">
+      <div class="row g-3 align-items-end">
+        <!-- Filtro por Estado -->
+        <div class="col-md-3 col-sm-6">
+          <label class="filter-label">
+            <i class="bi bi-funnel me-1"></i> Filtrar por Estado
+          </label>
+          <select class="form-select filter-select" [(ngModel)]="filtroEstado" (ngModelChange)="filtroEstado.set($event)">
+            <option value="TODOS">Todos los estados</option>
+            <option value="PENDIENTE">Pendiente</option>
+            <option value="INICIADA">Iniciada</option>
+            <option value="COMPLETADA">Completada</option>
+          </select>
+        </div>
+
+        <!-- Ordenar por -->
+        <div class="col-md-3 col-sm-6">
+          <label class="filter-label">
+            <i class="bi bi-sort-down me-1"></i> Ordenar por
+          </label>
+          <select class="form-select filter-select" [ngModel]="ordenarPor()" (ngModelChange)="ordenarPor.set($event)">
+            <option value="fecha-desc">Fecha (más reciente)</option>
+            <option value="fecha-asc">Fecha (más antigua)</option>
+          </select>
+        </div>
+
+        <!-- Rango de Fechas -->
+        <div class="col-md-2 col-sm-6">
+          <label class="filter-label">
+            <i class="bi bi-calendar me-1"></i> Desde
+          </label>
+          <input type="date" class="form-control filter-input" [ngModel]="fechaDesde()" (ngModelChange)="fechaDesde.set($event)">
+        </div>
+
+        <div class="col-md-2 col-sm-6">
+          <label class="filter-label">
+            <i class="bi bi-calendar me-1"></i> Hasta
+          </label>
+          <input type="date" class="form-control filter-input" [ngModel]="fechaHasta()" (ngModelChange)="fechaHasta.set($event)">
+        </div>
+
+        <!-- Botón Limpiar -->
+        <div class="col-md-2 col-sm-12">
+          <button type="button" class="btn btn-limpiar w-100" (click)="limpiarFiltros()">
+            <i class="bi bi-x-circle me-1"></i> Limpiar
+          </button>
+        </div>
+      </div>
+
+      <!-- Contador de resultados -->
+      <div class="results-counter mt-3">
+        <span>
+          <i class="bi bi-list-ul me-1"></i>
+          Mostrando <strong>{{ tareasFiltradas().length }}</strong> de <strong>{{ estadisticas().total }}</strong> tareas
+        </span>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-container">
+      <div class="stat-card" [class.active]="filtroEstado() === 'TODOS'" (click)="filtrarPorEstado('TODOS')">
+        <div class="stat-icon total">
+          <i class="bi bi-list-task"></i>
+        </div>
+        <h3 class="stat-value">{{ estadisticas().total }}</h3>
+        <p class="stat-label">Total de Tareas</p>
+      </div>
+
+      <div class="stat-card" [class.active]="filtroEstado() === 'PENDIENTE'" (click)="filtrarPorEstado('PENDIENTE')">
+        <div class="stat-icon pending">
+          <i class="bi bi-clock-history"></i>
+        </div>
+        <h3 class="stat-value">{{ estadisticas().pendientes }}</h3>
+        <p class="stat-label">Pendientes</p>
+      </div>
+
+      <div class="stat-card" [class.active]="filtroEstado() === 'INICIADA'" (click)="filtrarPorEstado('INICIADA')">
+        <div class="stat-icon iniciada">
+          <i class="bi bi-hourglass-split"></i>
+        </div>
+        <h3 class="stat-value">{{ estadisticas().iniciadas }}</h3>
+        <p class="stat-label">Iniciadas</p>
+      </div>
+
+      <div class="stat-card" [class.active]="filtroEstado() === 'COMPLETADA'" (click)="filtrarPorEstado('COMPLETADA')">
+        <div class="stat-icon completed">
+          <i class="bi bi-check-circle"></i>
+        </div>
+        <h3 class="stat-value">{{ estadisticas().completadas }}</h3>
+        <p class="stat-label">Completadas</p>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    @if (loading()) {
+      <div class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-3 text-muted">Cargando tareas...</p>
+      </div>
+    }
+
+    <!-- Tasks Container -->
+    @if (!loading()) {
+      <div id="tasks-container">
+        <!-- Tasks List -->
+        @if (tareas().length > 0) {
+          @if (tareasFiltradas().length > 0) {
+            <div id="tasks-list">
+              @for (tarea of tareasFiltradas(); track tarea.idTarea; let i = $index) {
+                <div class="task-card" [style.animation-delay]="(i * 0.1) + 's'">
+                  <div class="task-header">
+                    <div>
+                      <h3 class="task-title">{{ tarea.titulo }}</h3>
+                      <p class="task-description">{{ tarea.descripcion }}</p>
+                    </div>
+
+                    <!-- Dropdown para cambiar estado -->
+                    <div class="dropdown">
+                      <span 
+                        class="task-badge dropdown-toggle" 
+                        [ngClass]="getBadgeClass(tarea.estado)"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <span>{{ tarea.estado }}</span>
+                      </span>
+                      <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                          <a class="dropdown-item" href="#" (click)="cambiarEstado(tarea, 'PENDIENTE', $event)">
+                            <i class="bi bi-clock me-2" style="color: #e65100;"></i>
+                            PENDIENTE
+                          </a>
+                        </li>
+                        <li>
+                          <a class="dropdown-item" href="#" (click)="cambiarEstado(tarea, 'INICIADA', $event)">
+                            <i class="bi bi-hourglass-split me-2" style="color: #1565c0;"></i>
+                            INICIADA
+                          </a>
+                        </li>
+                        <li>
+                          <a class="dropdown-item" href="#" (click)="cambiarEstado(tarea, 'COMPLETADA', $event)">
+                            <i class="bi bi-check-circle me-2" style="color: #2e7d32;"></i>
+                            COMPLETADA
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="task-footer">
+                    <div class="task-date">
+                      <i class="bi bi-calendar-event"></i>
+                      <span>{{ tarea.fechafin }}</span>
+                    </div>
+
+                    <div class="task-actions">
+                      <button type="button" class="btn-action btn-view" title="Ver detalle" (click)="verDetalle(tarea)">
+                        <i class="bi bi-eye"></i>
+                      </button>
+                      <a [routerLink]="['/tareas/editar', tarea.idTarea]" class="btn-action btn-edit" title="Editar">
+                        <i class="bi bi-pencil"></i>
+                      </a>
+                      <button type="button" class="btn-action btn-delete" title="Eliminar" (click)="confirmarEliminar(tarea, $event)">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          } @else {
+            <!-- No Results State -->
+            <div class="no-results-state">
+              <div class="no-results-icon">
+                <i class="bi bi-search"></i>
+              </div>
+              <h2 class="no-results-title">Sin resultados</h2>
+              <p class="no-results-text">No se encontraron tareas con los filtros aplicados</p>
+              <button type="button" class="btn btn-limpiar mt-3" (click)="limpiarFiltros()">
+                <i class="bi bi-x-circle me-1"></i> Limpiar filtros
+              </button>
+            </div>
+          }
+        } @else {
+          <!-- Empty State -->
+          <div class="empty-state">
+            <div class="empty-icon">
+              <i class="bi bi-clipboard-x"></i>
+            </div>
+            <h2 class="empty-title">No tienes tareas</h2>
+            <p class="empty-text">Comienza creando tu primera tarea y organiza tu día</p>
+            <a routerLink="/tareas/nueva" class="btn-new-task">
+              <i class="bi bi-plus-circle"></i>
+              Crear Primera Tarea
+            </a>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>
+
+<!-- Modal de Detalle de Tarea -->
+@if (tareaSeleccionada()) {
+  <div class="modal-backdrop-custom" (click)="cerrarModal()">
+    <div class="modal-dialog modal-dialog-centered modal-lg" (click)="$event.stopPropagation()">
+      <div class="modal-content">
+        <div class="modal-header border-0">
+          <h5 class="modal-title fw-bold">
+            <i class="bi bi-info-circle me-2"></i>
+            Detalle de Tarea
+          </h5>
+          <button type="button" class="btn-close btn-close-white" (click)="cerrarModal()"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Título -->
+          <div class="mb-4">
+            <h3 class="fw-bold text-dark mb-2">{{ tareaSeleccionada()!.titulo }}</h3>
+            <span class="badge rounded-pill fs-6 px-3 py-2" [ngClass]="getBadgeClass(tareaSeleccionada()!.estado)">
+              <i class="bi me-1" [ngClass]="tareaSeleccionada()!.estado === 'COMPLETADA' ? 'bi-check-circle-fill' : 'bi-clock-fill'"></i>
+              <span>{{ tareaSeleccionada()!.estado }}</span>
+            </span>
+          </div>
+
+          <!-- Info Cards -->
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <div class="p-3 bg-light rounded-3">
+                <div class="d-flex align-items-center mb-2">
+                  <div class="rounded-circle bg-success bg-opacity-10 p-2 me-2">
+                    <i class="bi bi-calendar-event text-success"></i>
+                  </div>
+                  <small class="text-muted text-uppercase">Fecha Fin</small>
+                </div>
+                <p class="fw-semibold mb-0">{{ tareaSeleccionada()!.fechafin }}</p>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="p-3 bg-light rounded-3">
+                <div class="d-flex align-items-center mb-2">
+                  <div class="rounded-circle bg-warning bg-opacity-10 p-2 me-2">
+                    <i class="bi bi-flag-fill text-warning"></i>
+                  </div>
+                  <small class="text-muted text-uppercase">Estado</small>
+                </div>
+                <p class="fw-semibold mb-0">{{ tareaSeleccionada()!.estado }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Descripción -->
+          <div class="mb-4">
+            <h6 class="fw-semibold mb-2">
+              <i class="bi bi-text-paragraph me-2"></i>
+              Descripción
+            </h6>
+            <div class="p-3 bg-light rounded-3">
+              <p class="mb-0 text-muted">
+                {{ tareaSeleccionada()!.descripcion || 'Sin descripción' }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Timeline -->
+          <div class="mb-3">
+            <h6 class="fw-semibold mb-3">
+              <i class="bi bi-clock-history me-2"></i>
+              Información Adicional
+            </h6>
+            <div class="timeline-container">
+              <div class="d-flex mb-3">
+                <div class="me-3">
+                  <div class="rounded-circle bg-primary" style="width: 12px; height: 12px; margin-top: 4px;"></div>
+                </div>
+                <div class="flex-grow-1">
+                  <p class="fw-semibold mb-1">Fecha límite</p>
+                  <p class="text-muted small mb-0">
+                    Completar antes del {{ tareaSeleccionada()!.fechafin }}
+                  </p>
+                </div>
+              </div>
+
+              <div class="d-flex">
+                <div class="me-3">
+                  <div class="rounded-circle" 
+                       [ngClass]="tareaSeleccionada()!.estado === 'COMPLETADA' ? 'bg-success' : 'bg-warning'"
+                       style="width: 12px; height: 12px; margin-top: 4px;"></div>
+                </div>
+                <div class="flex-grow-1">
+                  <p class="fw-semibold mb-1">Estado</p>
+                  <p class="small mb-0" [ngClass]="tareaSeleccionada()!.estado === 'COMPLETADA' ? 'text-success' : 'text-muted'">
+                    @if (tareaSeleccionada()!.estado === 'COMPLETADA') {
+                      <i class="bi bi-check-circle-fill text-success me-1"></i>
+                      Tarea completada exitosamente
+                    } @else {
+                      <i class="bi bi-hourglass-split text-warning me-1"></i>
+                      Tarea pendiente de completar
+                    }
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0 pt-0">
+          <button type="button" class="btn btn-secondary" (click)="cerrarModal()">
+            <i class="bi bi-x-circle me-1"></i>
+            Cerrar
+          </button>
+          <button type="button" class="btn btn-primary" (click)="editarDesdeModal()">
+            <i class="bi bi-pencil me-1"></i>
+            Editar
+          </button>
+          <button type="button" class="btn btn-danger" (click)="eliminarDesdeModal()">
+            <i class="bi bi-trash me-1"></i>
+            Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Toast Container -->
+@if (toastMessage()) {
+  <div class="toast-container position-fixed top-0 end-0 p-3">
+    <div class="toast show align-items-center text-white border-0" 
+         [ngClass]="{
+           'toast-success': toastType() === 'success',
+           'toast-error': toastType() === 'error',
+           'toast-info': toastType() === 'info'
+         }">
+      <div class="d-flex">
+        <div class="toast-body">
+          @if (toastType() === 'success') {
+            <i class="bi bi-check-circle-fill me-2"></i>
+          } @else if (toastType() === 'error') {
+            <i class="bi bi-exclamation-circle-fill me-2"></i>
+          } @else {
+            <i class="bi bi-info-circle-fill me-2"></i>
+          }
+          <span>{{ toastMessage() }}</span>
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" (click)="toastMessage.set(null)"></button>
+      </div>
+    </div>
+  </div>
+}

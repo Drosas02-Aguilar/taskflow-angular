@@ -1,0 +1,155 @@
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container">
+        <a class="navbar-brand" routerLink="/dashboard">
+            <div class="brand-icon"><i class="bi bi-check2-circle"></i></div>
+            TaskFlow
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/dashboard"><i class="bi bi-house-door me-1"></i> Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/tareas"><i class="bi bi-list-task me-1"></i> Mis Tareas</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle user-dropdown" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle me-1"></i> {{ username }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" routerLink="/usuario/perfil"><i class="bi bi-person me-2"></i> Mi
+                                Perfil</a></li>
+                        <li><a class="dropdown-item" routerLink="/auth/change-password"><i class="bi bi-key me-2"></i>
+                                Cambiar Contraseña</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item text-danger" (click)="logout()"><i
+                                    class="bi bi-box-arrow-right me-2"></i> Cerrar Sesión</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="main-content">
+    <div class="container">
+        <div class="form-container">
+            <div class="form-card">
+                <!-- Header -->
+                <div class="form-header">
+                    <div class="form-icon">
+                        <i class="bi" [ngClass]="isEditMode() ? 'bi-pencil-square' : 'bi-plus-circle'"></i>
+                    </div>
+                    <h1>{{ isEditMode() ? 'Editar Tarea' : 'Nueva Tarea' }}</h1>
+                    <p>{{ isEditMode() ? 'Modifica los datos de tu tarea' : 'Crea una nueva tarea para organizar tu día'
+                        }}</p>
+                </div>
+
+                <!-- Error -->
+                @if (errorMessage()) {
+                <div class="alert alert-danger">
+                    <i class="bi bi-exclamation-circle-fill me-2"></i>
+                    {{ errorMessage() }}
+                </div>
+                }
+
+                <!-- Loading tarea -->
+                @if (loadingTarea()) {
+                <div class="loading-container">
+                    <div class="spinner-border text-primary"></div>
+                    <p>Cargando tarea...</p>
+                </div>
+                }
+
+                <!-- Formulario -->
+                <!-- Formulario -->
+                @if (!loadingTarea()) {
+                <form [formGroup]="tareaForm" (ngSubmit)="onSubmit()">
+                    <!-- Título -->
+                    <div class="mb-4">
+                        <label for="titulo" class="form-label">
+                            <i class="bi bi-type me-2"></i>Título <span class="required">*</span>
+                        </label>
+                        <input type="text" class="form-control" id="titulo" formControlName="titulo"
+                            placeholder="Ej: Completar informe mensual" maxlength="100"
+                            [class.is-invalid]="isFieldInvalid('titulo')">
+                        <div class="form-footer">
+                            <span class="char-counter">{{ tituloLength }}/100</span>
+                            @if (isFieldInvalid('titulo')) {
+                            <span class="invalid-text">{{ getFieldError('titulo') }}</span>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Descripción -->
+                    <div class="mb-4">
+                        <label for="descripcion" class="form-label">
+                            <i class="bi bi-text-paragraph me-2"></i>Descripción
+                        </label>
+                        <textarea class="form-control" id="descripcion" formControlName="descripcion"
+                            placeholder="Describe los detalles de tu tarea..." rows="3" maxlength="150"
+                            [class.is-invalid]="isFieldInvalid('descripcion')">
+      </textarea>
+                        <div class="form-footer">
+                            <span class="char-counter">{{ descripcionLength }}/150</span>
+                            @if (isFieldInvalid('descripcion')) {
+                            <span class="invalid-text">{{ getFieldError('descripcion') }}</span>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Fecha límite -->
+                    <div class="mb-4">
+                        <label for="fechafin" class="form-label">
+                            <i class="bi bi-calendar-event me-2"></i>Fecha límite <span class="required">*</span>
+                        </label>
+                        <input type="date" class="form-control" id="fechafin" formControlName="fechafin"
+                            [class.is-invalid]="isFieldInvalid('fechafin')">
+                        @if (isFieldInvalid('fechafin')) {
+                        <div class="invalid-feedback">{{ getFieldError('fechafin') }}</div>
+                        }
+                    </div>
+
+                    <!-- Estado -->
+                    <div class="mb-4">
+                        <label for="estado" class="form-label">
+                            <i class="bi bi-flag me-2"></i>Estado <span class="required">*</span>
+                        </label>
+                        <select class="form-select" id="estado" formControlName="estado">
+                            <option value="INICIADA">Iniciada</option>
+                            <option value="PENDIENTE">Pendiente</option>
+                            <option value="COMPLETADA">Completada</option>
+                        </select>
+                    </div>
+
+                    <!-- Botones -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn-submit" [disabled]="loading()">
+                            @if (loading()) {
+                            <span class="spinner-border spinner-border-sm me-2"></span>
+                            Guardando...
+                            } @else {
+                            <i class="bi me-2" [ngClass]="isEditMode() ? 'bi-check-lg' : 'bi-plus-lg'"></i>
+                            {{ isEditMode() ? 'Guardar Cambios' : 'Crear Tarea' }}
+                            }
+                        </button>
+                        <a routerLink="/tareas" class="btn-cancel">
+                            <i class="bi bi-x-lg me-2"></i>
+                            Cancelar
+                        </a>
+                    </div>
+                </form>
+                }
+            </div>
+        </div>
+    </div>
+</div>
