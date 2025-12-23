@@ -71,7 +71,6 @@ export class TareaFormComponent implements OnInit {
         if (response.status === 200 && response.object) {
           const tarea = response.object;
           
-          // Asegurarse de que los valores sean strings
           this.tareaForm.setValue({
             titulo: tarea.titulo || '',
             descripcion: tarea.descripcion || '',

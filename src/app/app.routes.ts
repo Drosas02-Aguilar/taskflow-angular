@@ -57,26 +57,26 @@ export const routes: Routes = [
     path: 'tareas/nueva',
     canActivate: [authGuard],
     loadComponent: () => import('./features/tareas/tarea-form/tarea-form.component')
-      .then(m => m.TareaFormComponent)
+      .then(modulo => modulo.TareaFormComponent)
   },
   {
     path: 'tareas/editar/:id',
     canActivate: [authGuard],
     loadComponent: () => import('./features/tareas/tarea-form/tarea-form.component')
-      .then(m => m.TareaFormComponent)
+      .then(modulo => modulo.TareaFormComponent)
   },
-  // {
-  //   path: 'usuario/perfil',
-  //   canActivate: [authGuard],
-  //   loadComponent: () => import('./features/usuario/perfil/perfil.component')
-  //     .then(m => m.PerfilComponent)
-  // },
-  // {
-  //   path: 'usuario/editar',
-  //   canActivate: [authGuard],
-  //   loadComponent: () => import('./features/usuario/editar/editar.component')
-  //     .then(m => m.EditarComponent)
-  // },
+  {
+    path: 'usuario/perfil',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/usuario/perfil/perfil.component')
+      .then(modulo => modulo.PerfilComponent)
+  },
+  {
+    path: 'usuario/editar',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/usuario/editar/editar.component')
+      .then(modulo => modulo.EditarComponent)
+  },
   
   { path: '**', redirectTo: '/auth/login' }
 ];

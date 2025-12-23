@@ -1,0 +1,142 @@
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container">
+        <a class="navbar-brand" routerLink="/dashboard">
+            <div class="brand-icon"><i class="bi bi-check2-circle"></i></div>
+            TaskFlow
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/dashboard"><i class="bi bi-house-door me-1"></i> Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/tareas"><i class="bi bi-list-task me-1"></i> Mis Tareas</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle user-dropdown active" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle me-1"></i> {{ username }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" routerLink="/usuario/perfil"><i class="bi bi-person me-2"></i> Mi
+                                Perfil</a></li>
+                        <li><a class="dropdown-item" routerLink="/auth/change-password"><i class="bi bi-key me-2"></i>
+                                Cambiar Contraseña</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item text-danger" (click)="logout()"><i
+                                    class="bi bi-box-arrow-right me-2"></i> Cerrar Sesión</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="main-content">
+    <div class="container">
+        <div class="form-container">
+            <div class="form-card">
+                <!-- Header -->
+                <div class="form-header">
+                    <div class="form-icon">
+                        <i class="bi bi-person-gear"></i>
+                    </div>
+                    <h1>Editar Perfil</h1>
+                    <p>Actualiza tu información personal</p>
+                </div>
+
+                <!-- Info -->
+                <div class="info-box">
+                    <i class="bi bi-info-circle-fill"></i>
+                    <p>Solo actualiza los campos que desees cambiar. Los demás permanecerán sin modificar.</p>
+                </div>
+
+                <!-- Alertas -->
+                @if (successMessage()) {
+                <div class="alert alert-success">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    {{ successMessage() }}
+                </div>
+                }
+
+                @if (errorMessage()) {
+                <div class="alert alert-danger">
+                    <i class="bi bi-exclamation-circle-fill me-2"></i>
+                    {{ errorMessage() }}
+                </div>
+                }
+
+                <!-- Loading -->
+                @if (loadingUser()) {
+                <div class="loading-container">
+                    <div class="spinner-border text-primary"></div>
+                    <p>Cargando datos...</p>
+                </div>
+                }
+
+                <!-- Formulario -->
+                @if (!loadingUser()) {
+                <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+                    <!-- Nombre -->
+                    <div class="mb-4">
+                        <label for="nombre" class="form-label">
+                            <i class="bi bi-person me-2"></i>Nombre Completo
+                        </label>
+                        <input type="text" class="form-control" id="nombre" formControlName="nombre"
+                            placeholder="Deja vacío para no cambiar" maxlength="100">
+                        <div class="form-text">Máximo 100 caracteres (opcional)</div>
+                    </div>
+
+                    <!-- Username -->
+                    <div class="mb-4">
+                        <label for="username" class="form-label">
+                            <i class="bi bi-at me-2"></i>Nombre de Usuario
+                        </label>
+                        <input type="text" class="form-control" id="username" formControlName="username"
+                            placeholder="Deja vacío para no cambiar" maxlength="50">
+                        <div class="form-text">Nombre único de usuario (opcional)</div>
+                    </div>
+
+                    <!-- Email (disabled) -->
+                    <div class="mb-4">
+                        <label for="email" class="form-label">
+                            <i class="bi bi-envelope me-2"></i>Correo Electrónico
+                            <i class="bi bi-lock-fill ms-2 text-muted"></i>
+                        </label>
+                        <input type="email" class="form-control" id="email" formControlName="email" readonly>
+                        <div class="form-text">
+                            <i class="bi bi-shield-lock me-1"></i>
+                            El correo electrónico no se puede modificar por seguridad
+                        </div>
+                    </div>
+
+                    <!-- Botones -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn-submit" [disabled]="loading()">
+                            @if (loading()) {
+                            <span class="spinner-border spinner-border-sm me-2"></span>
+                            Guardando...
+                            } @else {
+                            <i class="bi bi-check-circle me-2"></i>
+                            Guardar Cambios
+                            }
+                        </button>
+                        <a routerLink="/usuario/perfil" class="btn-cancel">
+                            <i class="bi bi-x-circle me-2"></i>
+                            Cancelar
+                        </a>
+                    </div>
+                </form>
+                }
+            </div>
+        </div>
+    </div>
+</div>

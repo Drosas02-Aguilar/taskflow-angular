@@ -20,7 +20,6 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  // ==================== GETTERS ====================
   
   get token(): string | null {
     return this.tokenSubject.value;
@@ -38,7 +37,6 @@ export class AuthService {
     return !!this.token;
   }
 
-  // ==================== STORAGE ====================
 
   private getStoredToken(): string | null {
     return localStorage.getItem('token');
@@ -73,7 +71,6 @@ export class AuthService {
     this.idUsuarioSubject.next(null);
   }
 
-  // ==================== AUTH ENDPOINTS ====================
 
   register(usuario: Usuario): Observable<Result> {
     return this.http.post<Result>(`${this.apiUrl}/register`, usuario);
