@@ -77,6 +77,8 @@ export class AuthService {
   }
 
   verify(token: string): Observable<Result> {
+
+    
     return this.http.get<Result>(`${this.apiUrl}/verify`, {
       params: new HttpParams().set('token', token)
     });

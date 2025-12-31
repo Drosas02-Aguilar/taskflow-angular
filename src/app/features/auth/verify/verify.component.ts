@@ -23,6 +23,8 @@ export class VerifyComponent implements OnInit{
     ngOnInit(): void {
         const token = this.route.snapshot.queryParams['token'];
 
+        
+
         if(!token){
             this.loading.set(false);
             this.errorMessage.set('No se proporcionó un token de verificación');
@@ -32,6 +34,12 @@ export class VerifyComponent implements OnInit{
     }
 
     private verifyAccount(token: string): void{
+        console.log('=== VERIFICANDO CUENTA ===');
+  console.log('Token:', token);
+  console.log('URL que se llamará:', `http://localhost:8080/api/auth/verify?token=${token}`);
+  
+       
+       
         this.authService.verify(token).subscribe({
             next:(response)=> {
                 this.loading.set(false);
@@ -42,6 +50,11 @@ export class VerifyComponent implements OnInit{
                 }
             },
             error:(error)=>{
+
+
+                 console.log('=== ERROR ===');
+      console.log('Status:', error.status);
+      console.log('Error completo:', error);
                 this.loading.set(false);
                 this.errorMessage.set(error.error?.errorMessage ||  'Error al verificar la cuenta' );
             }
