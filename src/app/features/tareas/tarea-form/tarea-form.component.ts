@@ -23,9 +23,13 @@ export class TareaFormComponent implements OnInit {
   loading = signal(false);
   loadingTarea = signal(false);
   errorMessage = signal<string | null>(null);
+  successMessage = signal<string | null>(null);
   
   isEditMode = signal(false);
   tareaId = signal<number | null>(null);
+
+  // Fecha mínima = hoy (formato YYYY-MM-DD)
+  minDate = new Date().toISOString().split('T')[0];
 
   get username(): string | null {
     return this.authService.username;
@@ -96,8 +100,20 @@ export class TareaFormComponent implements OnInit {
       return;
     }
 
+    // Validar fecha no sea del pasado (solo para crear)
+    if (!this.isEditMode()) {
+      const fechaSeleccionada = new Date(this.tareaForm.get('fechafin')?.value);
+      const hoy = new Date();
+      hoy.setHours(0, 0, 0, 0);
+      
+      if (fechaSeleccionada < hoy) {
+        this.errorMessage.set('La fecha límite no puede ser anterior a hoy');
+        return;
+      }
+    }
+
     this.loading.set(true);
-    this.errorMessage.set(null);
+    this.clearMessages();
 
     const tarea: Tarea = {
       titulo: this.tareaForm.get('titulo')?.value,
@@ -114,7 +130,14 @@ export class TareaFormComponent implements OnInit {
       next: (response) => {
         this.loading.set(false);
         if (response.status === 200) {
-          this.router.navigate(['/tareas']);
+          const mensaje = this.isEditMode() 
+            ? 'Tarea actualizada correctamente' 
+            : 'Tarea creada correctamente';
+          this.successMessage.set(mensaje);
+          
+          this.router.navigate(['/tareas'],{
+            queryParams: {success: mensaje }
+          });
         } else {
           this.errorMessage.set(response.errorMessage || 'Error al guardar la tarea');
         }
@@ -124,6 +147,11 @@ export class TareaFormComponent implements OnInit {
         this.errorMessage.set(error.error?.errorMessage || 'Error al guardar la tarea');
       }
     });
+  }
+
+  private clearMessages(): void {
+    this.errorMessage.set(null);
+    this.successMessage.set(null);
   }
 
   isFieldInvalid(field: string): boolean {

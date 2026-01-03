@@ -170,11 +170,21 @@
   margin-top: 5px;
 }
 
+// Form hint
+.form-hint {
+  display: block;
+  font-size: 11px;
+  color: #6c757d;
+  margin-top: 4px;
+  padding-left: 5px;
+}
+
 // Password strength indicator
 .password-strength {
   display: flex;
   align-items: center;
   gap: 10px;
+  margin-top: 8px;
 }
 
 .strength-bars {
@@ -184,14 +194,14 @@
 }
 
 .strength-bar {
-  height: 5px;
+  height: 6px;
   flex: 1;
   border-radius: 3px;
   background: #e9ecef;
   transition: all 0.3s ease;
 
   &.active {
-    transform: scaleY(1.2);
+    transform: scaleY(1.3);
   }
 }
 
@@ -199,6 +209,7 @@
   font-size: 12px;
   font-weight: 600;
   min-width: 50px;
+  text-align: right;
 }
 
 // Button

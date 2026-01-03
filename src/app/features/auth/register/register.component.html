@@ -45,6 +45,7 @@
         @if (isFieldInvalid('nombre')) {
           <div class="invalid-feedback">{{ getFieldError('nombre') }}</div>
         }
+        <small class="form-hint">Solo letras permitidas</small>
       </div>
 
       <!-- Username -->
@@ -62,6 +63,7 @@
         @if (isFieldInvalid('username')) {
           <div class="invalid-feedback">{{ getFieldError('username') }}</div>
         }
+        <small class="form-hint">Debe comenzar con letra. Solo letras, números y _</small>
       </div>
 
       <!-- Email -->
@@ -109,17 +111,17 @@
             <div 
               class="strength-bar" 
               [class.active]="passwordStrength().level >= 1"
-              [style.background-color]="passwordStrength().level >= 1 ? passwordStrength().color : ''">
+              [style.background-color]="passwordStrength().level >= 1 ? passwordStrength().color : '#e9ecef'">
             </div>
             <div 
               class="strength-bar" 
               [class.active]="passwordStrength().level >= 2"
-              [style.background-color]="passwordStrength().level >= 2 ? passwordStrength().color : ''">
+              [style.background-color]="passwordStrength().level >= 2 ? passwordStrength().color : '#e9ecef'">
             </div>
             <div 
               class="strength-bar" 
               [class.active]="passwordStrength().level >= 3"
-              [style.background-color]="passwordStrength().level >= 3 ? passwordStrength().color : ''">
+              [style.background-color]="passwordStrength().level >= 3 ? passwordStrength().color : '#e9ecef'">
             </div>
           </div>
           <span class="strength-text" [style.color]="passwordStrength().color">
