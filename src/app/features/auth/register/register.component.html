@@ -4,7 +4,6 @@
 
 <div class="card-container">
   <div class="card-register">
-    <!-- Logo -->
     <div class="logo-container">
       <div class="logo-icon">
         <i class="bi bi-person-plus-fill"></i>
@@ -13,7 +12,6 @@
       <p class="subtitle">Únete a TaskFlow y organiza tus tareas</p>
     </div>
 
-    <!-- Alertas -->
     @if (successMessage()) {
       <div class="alert alert-success">
         <i class="bi bi-check-circle-fill me-2"></i>
@@ -28,9 +26,7 @@
       </div>
     }
 
-    <!-- Formulario -->
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-      <!-- Nombre -->
       <div class="form-floating mb-3">
         <i class="bi bi-person-fill input-icon"></i>
         <input 
@@ -48,7 +44,6 @@
         <small class="form-hint">Solo letras permitidas</small>
       </div>
 
-      <!-- Username -->
       <div class="form-floating mb-3">
         <i class="bi bi-at input-icon"></i>
         <input 
@@ -66,7 +61,6 @@
         <small class="form-hint">Debe comenzar con letra. Solo letras, números y _</small>
       </div>
 
-      <!-- Email -->
       <div class="form-floating mb-3">
         <i class="bi bi-envelope-fill input-icon"></i>
         <input 
@@ -82,7 +76,6 @@
         }
       </div>
 
-      <!-- Password -->
       <div class="form-floating mb-2 position-relative">
         <i class="bi bi-lock-fill input-icon"></i>
         <input 
@@ -104,7 +97,6 @@
         }
       </div>
 
-      <!-- Password Strength Indicator -->
       @if (registerForm.get('password')?.value) {
         <div class="password-strength mb-3">
           <div class="strength-bars">
@@ -134,7 +126,6 @@
         Mínimo 6 caracteres. Usa mayúsculas, números y símbolos para mayor seguridad.
       </small>
 
-      <!-- Submit button -->
       <button type="submit" class="btn-primary-custom" [disabled]="loading()">
         @if (loading()) {
           <span class="spinner-border spinner-border-sm me-2"></span>
@@ -146,8 +137,7 @@
       </button>
     </form>
 
-    <!-- Login link -->
-    <div class="login-link">
+          <div class="login-link">
       <span>¿Ya tienes cuenta?</span>
       <a routerLink="/auth/login">Inicia sesión aquí</a>
     </div>

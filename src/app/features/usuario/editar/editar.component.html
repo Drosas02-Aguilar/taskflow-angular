@@ -39,12 +39,10 @@
     </div>
 </nav>
 
-<!-- Main Content -->
 <div class="main-content">
     <div class="container">
         <div class="form-container">
             <div class="form-card">
-                <!-- Header -->
                 <div class="form-header">
                     <div class="form-icon">
                         <i class="bi bi-person-gear"></i>
@@ -53,13 +51,11 @@
                     <p>Actualiza tu información personal</p>
                 </div>
 
-                <!-- Info -->
                 <div class="info-box">
                     <i class="bi bi-info-circle-fill"></i>
                     <p>Solo actualiza los campos que desees cambiar. Los demás permanecerán sin modificar.</p>
                 </div>
 
-                <!-- Alertas -->
                 @if (successMessage()) {
                 <div class="alert alert-success">
                     <i class="bi bi-check-circle-fill me-2"></i>
@@ -74,7 +70,6 @@
                 </div>
                 }
 
-                <!-- Loading -->
                 @if (loadingUser()) {
                 <div class="loading-container">
                     <div class="spinner-border text-primary"></div>
@@ -82,10 +77,8 @@
                 </div>
                 }
 
-                <!-- Formulario -->
                 @if (!loadingUser()) {
                 <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
-                    <!-- Nombre -->
                     <div class="mb-4">
                         <label for="nombre" class="form-label">
                             <i class="bi bi-person me-2"></i>Nombre Completo
@@ -95,7 +88,6 @@
                         <div class="form-text">Máximo 100 caracteres (opcional)</div>
                     </div>
 
-                    <!-- Username -->
                     <div class="mb-4">
                         <label for="username" class="form-label">
                             <i class="bi bi-at me-2"></i>Nombre de Usuario
@@ -105,7 +97,6 @@
                         <div class="form-text">Nombre único de usuario (opcional)</div>
                     </div>
 
-                    <!-- Email (disabled) -->
                     <div class="mb-4">
                         <label for="email" class="form-label">
                             <i class="bi bi-envelope me-2"></i>Correo Electrónico
@@ -118,7 +109,6 @@
                         </div>
                     </div>
 
-                    <!-- Botones -->
                     <div class="form-actions">
                         <button type="submit" class="btn-submit" [disabled]="loading()">
                             @if (loading()) {

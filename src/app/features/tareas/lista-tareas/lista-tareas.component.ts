@@ -18,24 +18,19 @@
       private router = inject(Router);
       private route = inject(ActivatedRoute);
 
-      // Estado
       tareas = signal<Tarea[]>([]);
       loading = signal(true);
       
-      // Toast
       toastMessage = signal<string | null>(null);
       toastType = signal<'success' | 'error' | 'info'>('success');
       
-      // Filtros
       filtroEstado = signal<EstadoTarea | 'TODOS'>('TODOS');
       ordenarPor = signal<string>('fecha-desc');
       fechaDesde = signal<string>('');
       fechaHasta = signal<string>('');
 
-      // Modal detalle
       tareaSeleccionada = signal<Tarea | null>(null);
 
-      // Estadísticas
       estadisticas = computed(() => {
         const todas = this.tareas();
         return {
@@ -46,7 +41,6 @@
         };
       });
 
-      // Tareas filtradas y ordenadas
       tareasFiltradas = computed(() => {
         let resultado = [...this.tareas()];
 
@@ -55,7 +49,6 @@
           resultado = resultado.filter(t => t.estado === this.filtroEstado());
         }
 
-        // Filtrar por fecha desde
         if (this.fechaDesde()) {
           const desde = new Date(this.fechaDesde());
           resultado = resultado.filter(t => {
@@ -64,7 +57,6 @@
           });
         }
 
-        // Filtrar por fecha hasta
         if (this.fechaHasta()) {
           const hasta = new Date(this.fechaHasta() + 'T23:59:59');
           resultado = resultado.filter(t => {
@@ -73,7 +65,6 @@
           });
         }
 
-        // Ordenar
         resultado.sort((a, b) => {
           const fechaA = this.parseFecha(a.fechafin);
           const fechaB = this.parseFecha(b.fechafin);
@@ -139,7 +130,6 @@
         });
       }
 
-      // Cambiar estado desde dropdown
       cambiarEstado(tarea: Tarea, nuevoEstado: EstadoTarea, event: Event): void {
         event.preventDefault();
         event.stopPropagation();
@@ -149,7 +139,6 @@
         this.tareaService.cambiarEstado(tarea.idTarea, nuevoEstado).subscribe({
           next: (response) => {
             if (response.status === 200) {
-              // Actualizar localmente
               this.tareas.update(tareas =>
                 tareas.map(t => t.idTarea === tarea.idTarea ? { ...t, estado: nuevoEstado } : t)
               );
